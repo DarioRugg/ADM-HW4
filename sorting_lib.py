@@ -1,32 +1,9 @@
-
-"""import string
-alfabet = string.ascii_lowercase
-strings = ["ciao", "ciaoo", "ai"]
-
-for char in alfabet:
-    print(char, ord(char), end="  ")
-
-print("\n")
-
-identifiers = []
-for string in strings:
-    identifier = [str(ord(char)).rjust(3, '0') for char in string] #we use rjust since we want al number of 3 digits
-    identifier = int("".join(identifier).ljust(5*3, '0')) #adding 0s at the right, we want all numbers of equal lenght
-    identifiers.append(identifier)
-print(identifiers)
-print(sorted(identifiers))
-
-test = ["123", "123"]
-print( "".join(test).ljust(5*3, '0'))
-
-"""
-
-
 def __max_len(list_of_strings):
     max_len = 0
     for string in list_of_strings:
         max_len = max(max_len, len(string))
     return max_len
+
 
 def __to_ascii(list_of_strings, max_len):
     ascii_to_strings = dict()
@@ -36,13 +13,21 @@ def __to_ascii(list_of_strings, max_len):
         """for each char of the string computing its ascii value and building a list of them, since we have no other 
         chars below the a, we can make the the count of the ascii character start from 1 decreasing all the ascii values 
         by the value of a-1"""
-        identifier = [str(ord(char)-(ord("a")-1)).rjust(2, '0') for char in string] #we use rjust since we want al number of 2 digits
-        """ransforming the list in a number"""
-        identifier = int("".join(identifier).ljust(max_len*2, '0')) #adding 0s at the right, we want all numbers of equal lenght
-        identifiers.append(identifier)
+        ascii_score = 0
+        power = max_len - 1 #we start from the max_len because the fist letter must weight as the others first letters
+        for char in string: #from the fist (so the most important) to the last (the lesser) letter of the string
+            """in some ways we count in base (ord("z") - (ord("a") - 1)), so the length of our possible chars so if for 
+            example the word is made by three letters we will write them as 26^2*a 26^1*b 26^0*c. 
+            So the moltiplicator is the number that will multiply the ascii value of the letter and change it's importance"""
+            moltiplicator = (ord("z") - (ord("a") - 1)) ** power
+            # we subtract by (ord("a") - 1) since we don't have any possible letter before a
+            ascii_score += (ord(char) - (ord("a") - 1)) * moltiplicator
+            power -= 1 # in the next iteration the moltipicator must be smaller, as the weight of the next letter
+
+        identifiers.append(ascii_score) #now we add the asci value evaluated to the list
 
         #for easilly go back from ascii score to strigs
-        ascii_to_strings[identifier] = string
+        ascii_to_strings[ascii_score] = string
 
     return (identifiers, ascii_to_strings)
 
