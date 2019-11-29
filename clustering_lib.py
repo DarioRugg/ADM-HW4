@@ -27,7 +27,7 @@ for number in range(k):
 
 i = 0 #counter for iteration
 go_on = True #fixing for the while loop
-while go_on:
+while go_on: #while go_on is true,
 
     classes = dd(list) #creating a default dictionary for each cluster
     for elements in data: #for every element of dataset
