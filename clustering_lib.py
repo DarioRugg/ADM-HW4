@@ -1,10 +1,10 @@
-import random
-import numpy as np
-from collections import defaultdict as dd
+import random #for taking random sample
+import numpy as np #for making arrays
+from collections import defaultdict as dd #for creating default dictionary
 import itertools
-import matplotlib.pyplot as plt
-import math
-import pandas as pd
+import matplotlib.pyplot as plt #for plotting
+import math #for using mathematical eqn
+import pandas as pd #for reading data
 
 #creating a function for euclidean distance, has two vector inputs and returns the euclidean distance between the vectors
 def dist(v1, v2):
