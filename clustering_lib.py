@@ -6,45 +6,46 @@ import matplotlib.pyplot as plt
 import math
 import pandas as pd
 
+#creating a function for euclidean distance, has two vector inputs and returns the euclidean distance between the vectors
 def dist(v1, v2):
-    distance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(v1, v2)]))  # that's just the euclidean distance
+    distance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(v1, v2)])) 
     return distance
 
-
+#getting the data set with pandas
 data = pd.read_csv("wine.csv")
-data = data.values.tolist()
-data = list(map(lambda x: np.array(list(map(int, x))), data))
+data = data.values.tolist() #converting the values of dataset to lists
+data = list(map(lambda x: np.array(list(map(int, x))), data)) #converting to NumPy array
 print(data, type(data), type(data[0]))
 
-k = 3
+k = 3 #providing initial cluster number
 
-centroids = [[] for i in range(k)]
+centroids = [[] for i in range(k)] #creating empty lists for k centroids
 
-a = random.sample(range(0, len(data)), k)
+a = random.sample(range(0, len(data)), k) #taking k random samples from the dataset 
 for number in range(k):
-    centroids[number] = data[a[number]]
+    centroids[number] = data[a[number]] #assigning them as initial clusters
 
-i = 0
-go_on = True
+i = 0 #counter for iteration
+go_on = True #fixing for the while loop
 while go_on:
 
-    classes = dd(list)
-    for elements in data:
+    classes = dd(list) #creating a default dictionary for each cluster
+    for elements in data: #for every element of dataset
         print(elements)
-        distance = [dist(elements, cluster) for cluster in centroids]
-        cluster = distance.index(min(distance))
-        classes[cluster].append(elements)
+        distance = [dist(elements, cluster) for cluster in centroids] #calculate the distance between the centroid and element
+        cluster = distance.index(min(distance)) #take the index of the cluster
+        classes[cluster].append(elements) #and assign the element to cluster with that index
 
-    old_centroids = centroids.copy()
+    old_centroids = centroids.copy() #for keeping the previous centroids
     for cluster in classes.keys():
-        centroids[cluster] = sum(classes[cluster]) / len(classes[cluster])
+        centroids[cluster] = sum(classes[cluster]) / len(classes[cluster]) #arrange new centroids by calculating the new mean
 
-    i += 1
+    i += 1 #increase the counter by 1
     print("\n----------> iteration number: ", i)
     print(centroids)
     print(old_centroids)
-    if all([np.allclose(x, y) for x, y in zip(centroids, old_centroids)]):
-        go_on = False
+    if all([np.allclose(x, y) for x, y in zip(centroids, old_centroids)]): #if the previous centroids are equal to the new ones
+        go_on = False #break the loop
 
 
 #---------------------------------------- plotting --------------------------------------------------------------
