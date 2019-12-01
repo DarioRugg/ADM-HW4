@@ -1,9 +1,8 @@
 # ADM-HW4
 Repository for Homework 4
-Group 3
-Dario Ruggeri 
-Angelo Berardi
-Batuhan Yeniceri
+Group 3:
+Dario Ruggeri, 
+Angelo Berardi and Batuhan Yeniceri
 
 Homework consists of 4 questions;
 "main.ipynb" file contains the solutions of the questions,
