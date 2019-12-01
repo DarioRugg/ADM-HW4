@@ -9,4 +9,5 @@ Homework consists of 4 questions;
 "hashing_lib.py" contains the codes for question 1,
 "sorting_lib.py" contains the codes for question 2,
 "clustering_lib.py" contains the codes for question 3,
-Answer for the question 4 is in the "main.ipynb" file.
+Answer for the question 4 is in the "main.ipynb" file,
+"bonus_lib.py" contains the bonus question's codes
