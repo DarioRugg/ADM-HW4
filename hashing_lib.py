@@ -50,13 +50,13 @@ def BloomFilter(file1, file2):
 
     first_assignment = True #The first variable it's required to give to min_max the start values and we done it using a boolean variable
     
-    
     with open(file1, "r") as file: #Here we take the first file, checking if there is a new min and max inside every string
         for line in file:
             if first_assignment:
                 minimum = min(list(map(lambda x: ord(x), line.strip())))
                 maximum = 0
                 first_assignment = False
+
             minimum, maximum = min_max(minimum, maximum, line.strip())
             
             
@@ -65,21 +65,17 @@ def BloomFilter(file1, file2):
                        #We have the samething here. If we have a maximum value that is 10, and the min is 5, of course every number has maximum a difference between max-min!
     
 
-    hash_functions = [1,2, 3, 5, 7] #this one is the power of our hash function, dividing it with prime number, we get every time a different number that has a unique rest 
+    hash_functions = [1 ,2, 3, 5, 7] #this one is the power of our hash function, dividing it with prime number, we get every time a different number that has a unique rest 
                                       #if we divide it fot the lenght of the Bloom Filter! Why it is a power? because you can create a powerfull filter just adding some prime numbers
 
     coefficients = np.array(list(map(lambda x: maximum ** x, [i for i in range(20)]))) #We already talked about coefficients, it's an array that has for each position the max value 
                                                                                        #powered to the indicies, it iterate to 20 because we already know that each pass3word has 20
                                                                                        #characters!
-                                                                                       
-    length = 200000000 #That's the lenght of the BloomFilter it's importart because all the filter is in function of it! We put it to 100million because we understood an interesting fact
-                      #If We put the lenght to 1Billion we recive by our algorithm exactly the same amount of duplicates that we recive putting it to 100million! however, a smallar
-                      #number means that it is really faster
+    start = time.time()                                                                                  
+    length = 900000000 #That's the leght of the filter, unfortunally our machines can't execute large numbers
                       
     bloomfilter = np.zeros(length) #The bloomfilter start's with an array of zeros!
-    
-    
-    
+
     #Let's built the filter!
     with open(file1, "r") as file: #here we get "passwords1.txt"
         for line in file:
@@ -94,9 +90,10 @@ def BloomFilter(file1, file2):
     
     counter = 0 #here the counter starts, the one that will give use the number of duplicates detected
 
+    passwords=0 #this is a counter that we need to calculate the probability of false positive
     with open(file2, "r") as file: #So here we open passwords2.txt and we start to do the samething as before, but here we have a change
         for line in file:
-
+            passwords+=1
             hash = []
             hash_temp=hashcii(line.strip(), minimum, coefficients)
             for function in hash_functions:
@@ -107,8 +104,8 @@ def BloomFilter(file1, file2):
 
     end=time.time()
     print("Number of hash function used: ", len(hash_functions))
-    print("Number of duplicates detected", counter) #Expected duplicates detected 39Millions
-    print("Probability of false positive")
+    print("Number of duplicates detected", counter)
+    print("Probability of false positive: ",(passwords-counter)/passwords) #The number of false positive has to be the rateo between the total tests (so the numbers of passwords in password2) minus how many duplicates we had on the totaltests done
     print("Execution time", end - start) #Expected running time 1835 sec (30 minutes!)
 
 BloomFilter("passwords1.txt","passwords2.txt")
