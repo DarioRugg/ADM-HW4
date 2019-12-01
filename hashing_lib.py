@@ -15,14 +15,14 @@ def min_max(minimum, maximum, string):           #Here we take the min and the m
     return (minimum, maximum)                    #and we return both, minimum and maximum
 
 
-#Here we have our wonderfun hash function, very smart and cool, the good thing about it is that you can create different indicies for the bloom filter just using a
+#Here we have our hash function, very smart and cool, the good thing about it is that you can create different indicies for the bloom filter just using a
 #different prime number. We found this one and we thought it was easy to do and also fast.
     
 def hashcii(string, minimum, coefficients): #So here we have it, we get the string (obviously), the minimum and the coefficients list (we will see it later)
     orders = np.array(list(map(lambda x: (ord(x)-(minimum-1)), string))) #We create and array that has the ord of the each character minus the minimum -1,
                                                                          #That's because if you take a string where the min is 10, every character 
                                                                          #you know that will starts with minimum 10, so if you have to order them, you can redure their value
-                                                                         #by 9, and you will keep the order!
+                                                                         #by 9, and you will keep the order!                                                                     
     return np.dot(coefficients, orders) #Then we do a np.dot function using our coefficients and the array of ord that we got before and we return that
 
 #Here we have the Bloomfilter_add, the function that we use to create the filter, it gets values created using the hash function, the bloomfilter already done and his lenght
@@ -49,7 +49,6 @@ def BloomFilter(file1, file2):
     start = time.time()
 
     first_assignment = True #The first variable it's required to give to min_max the start values and we done it using a boolean variable
-    
     with open(file1, "r") as file: #Here we take the first file, checking if there is a new min and max inside every string
         for line in file:
             if first_assignment:
@@ -65,14 +64,14 @@ def BloomFilter(file1, file2):
                        #We have the samething here. If we have a maximum value that is 10, and the min is 5, of course every number has maximum a difference between max-min!
     
 
-    hash_functions = [1 ,2, 3, 5, 7] #this one is the power of our hash function, dividing it with prime number, we get every time a different number that has a unique rest 
+    hash_functions = [1 ,2, 3] #this one is the power of our hash function, dividing it with prime number, we get every time a different number that has a unique rest 
                                       #if we divide it fot the lenght of the Bloom Filter! Why it is a power? because you can create a powerfull filter just adding some prime numbers
 
     coefficients = np.array(list(map(lambda x: maximum ** x, [i for i in range(20)]))) #We already talked about coefficients, it's an array that has for each position the max value 
                                                                                        #powered to the indicies, it iterate to 20 because we already know that each pass3word has 20
                                                                                        #characters!
     start = time.time()                                                                                  
-    length = 900000000 #That's the leght of the filter, unfortunally our machines can't execute large numbers
+    length = 300000000 #That's the leght of the filter, unfortunally our machines can't execute large numbers
                       
     bloomfilter = np.zeros(length) #The bloomfilter start's with an array of zeros!
 
@@ -104,8 +103,6 @@ def BloomFilter(file1, file2):
 
     end=time.time()
     print("Number of hash function used: ", len(hash_functions))
-    print("Number of duplicates detected", counter)
+    print("Number of duplicates detected", counter) 
     print("Probability of false positive: ",(passwords-counter)/passwords) #The number of false positive has to be the rateo between the total tests (so the numbers of passwords in password2) minus how many duplicates we had on the totaltests done
     print("Execution time", end - start) #Expected running time 1835 sec (30 minutes!)
-
-BloomFilter("passwords1.txt","passwords2.txt")
